@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% block title %}AI Question Generator – Smart Learning{% endblock %}
+{% block extra_css %}
+<style>
+  .ai-grid { display:grid; grid-template-columns:1fr 1.4fr; gap:1.5rem; align-items:start; }
+  .qbox { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:1.6rem; box-shadow:var(--shadow); }
+  .q-section { margin-bottom:1.5rem; }
+  .q-section h4 { font-size:1rem; margin-bottom:.8rem; display:flex; align-items:center; gap:8px; }
+  .q-mark { background:var(--primary); color:white; padding:2px 10px; border-radius:12px; font-size:.75rem; font-weight:700; }
+  .q-mark.five { background:#7C3AED; }
+  .q-item { display:flex; gap:10px; padding:8px 0; border-bottom:1px solid var(--border); font-size:.9rem; }
+  .q-item:last-child { border-bottom:none; }
+  .q-num { font-weight:700; color:var(--primary); flex-shrink:0; min-width:20px; }
+  .hint { font-size:.8rem; color:var(--text2); margin-top:3px; }
+  .empty-state { text-align:center; padding:3rem; color:var(--text2); }
+  .empty-state i { font-size:3rem; opacity:.25; display:block; margin-bottom:1rem; }
+  @media(max-width:800px) { .ai-grid { grid-template-columns:1fr; } }
+</style>
+{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1><i class="fas fa-question-circle" style="margin-right:.6rem"></i>AI Question Generator</h1>
+  <p>Generate important exam-oriented 1-mark and 5-mark questions instantly</p>
+</div>
+<div class="ai-grid">
+  <div class="card">
+    <h3 style="margin-bottom:1.2rem">Generate Questions</h3>
+    <form method="POST">
+      <div class="form-group">
+        <label>Subject</label>
+        <select name="subject" class="form-control" required>
+          <option value="">Select Subject</option>
+          {% for s in subjects %}<option value="{{ s }}" {% if result and result.subject==s %}selected{% endif %}>{{ s }}</option>{% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Topic / Unit</label>
+        <input type="text" name="topic" class="form-control" placeholder="e.g. Linked Lists, CPU Scheduling" value="{{ result.topic if result }}" required>
+      </div>
+      <div class="form-group">
+        <label>Question Type</label>
+        <select name="qtype" class="form-control">
+          <option value="both">Both (1-mark + 5-mark)</option>
+          <option value="1mark">1-Mark Only</option>
+          <option value="5mark">5-Mark Only</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-accent" style="width:100%"><i class="fas fa-magic"></i> Generate Questions</button>
+    </form>
+  </div>
+  <div class="qbox">
+    {% if result %}
+      {% if result.error %}
+        <div style="color:#DC2626"><i class="fas fa-exclamation-circle"></i> {{ result.error }}</div>
+      {% elif result.data %}
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:1.2rem;padding-bottom:1rem;border-bottom:1px solid var(--border)">
+          <span style="background:linear-gradient(135deg,#2563EB,#8B5CF6);color:white;padding:4px 12px;border-radius:20px;font-size:.75rem;font-weight:700">AI Generated</span>
+          <strong>{{ result.topic }}</strong> &middot; <span style="color:var(--text2);font-size:.85rem">{{ result.subject }}</span>
+        </div>
+        {% if result.data.one_mark %}
+        <div class="q-section">
+          <h4><span class="q-mark">1 Mark</span> Short Answer Questions</h4>
+          {% for q in result.data.one_mark %}
+          <div class="q-item"><span class="q-num">Q{{ loop.index }}</span><span>{{ q }}</span></div>
+          {% endfor %}
+        </div>
+        {% endif %}
+        {% if result.data.five_mark %}
+        <div class="q-section">
+          <h4><span class="q-mark five">5 Mark</span> Long Answer Questions</h4>
+          {% for q in result.data.five_mark %}
+          <div class="q-item">
+            <span class="q-num">Q{{ loop.index }}</span>
+            <div>
+              <div>{% if q is mapping %}{{ q.question }}{% else %}{{ q }}{% endif %}</div>
+              {% if q is mapping and q.hint %}<div class="hint">💡 Hint: {{ q.hint }}</div>{% endif %}
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+      {% elif result.raw %}
+        <div style="white-space:pre-wrap;font-size:.9rem;line-height:1.7">{{ result.raw }}</div>
+      {% endif %}
+    {% else %}
+      <div class="empty-state"><i class="fas fa-lightbulb"></i><p>Generated questions will appear here.</p></div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

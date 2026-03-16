@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}My Profile – Smart Learning{% endblock %}
+{% block extra_css %}
+<style>
+  .profile-grid { display:grid; grid-template-columns:1fr 2fr; gap:1.5rem; }
+  .avatar { width:88px; height:88px; border-radius:50%; background:linear-gradient(135deg,#2563EB,#8B5CF6); display:flex; align-items:center; justify-content:center; font-size:36px; color:white; margin:0 auto 1rem; }
+  .info-row { display:flex; padding:10px 0; border-bottom:1px solid var(--border); font-size:.92rem; }
+  .info-row:last-child { border-bottom:none; }
+  .info-lbl { font-weight:600; color:var(--text2); width:120px; flex-shrink:0; }
+  @media(max-width:700px) { .profile-grid { grid-template-columns:1fr; } }
+</style>
+{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1><i class="fas fa-user-circle" style="margin-right:.6rem"></i>My Profile</h1>
+  <p>Your Smart Learning account details</p>
+</div>
+<div class="profile-grid">
+  <div class="card" style="text-align:center">
+    <div class="avatar">{{ user.name[0].upper() if user else '?' }}</div>
+    <h3 style="margin-bottom:.3rem">{{ user.name }}</h3>
+    <span class="badge badge-blue">{{ user.role|title }}</span>
+    <div style="margin-top:1.5rem">
+      <a href="{{ url_for('auth.logout') }}" class="btn btn-outline btn-sm" style="color:var(--danger);border-color:var(--danger)">
+        <i class="fas fa-sign-out-alt"></i> Logout
+      </a>
+    </div>
+  </div>
+  <div class="card">
+    <h3 style="margin-bottom:1.2rem">Account Information</h3>
+    <div class="info-row"><span class="info-lbl">Name</span><span>{{ user.name }}</span></div>
+    <div class="info-row"><span class="info-lbl">Email</span><span>{{ user.email }}</span></div>
+    <div class="info-row"><span class="info-lbl">Role</span><span>{{ user.role|title }}</span></div>
+    <div class="info-row"><span class="info-lbl">Semester</span><span>{{ user.semester }}</span></div>
+    <div class="info-row"><span class="info-lbl">Joined</span><span>{{ user.created }}</span></div>
+    <div class="info-row"><span class="info-lbl">Status</span>
+      <span class="badge badge-green">Active</span>
+    </div>
+    <div style="margin-top:1.5rem;display:flex;gap:10px;flex-wrap:wrap">
+      <a href="{{ url_for('study_material') }}" class="btn btn-primary btn-sm"><i class="fas fa-book"></i> Browse Materials</a>
+      <a href="{{ url_for('quiz_home') }}"      class="btn btn-outline btn-sm"><i class="fas fa-clipboard-check"></i> Take a Quiz</a>
+      <a href="{{ url_for('ai.explain') }}"     class="btn btn-outline btn-sm"><i class="fas fa-brain"></i> AI Tools</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

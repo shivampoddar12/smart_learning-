@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Quiz Result – {{ subject }}{% endblock %}
+{% block extra_css %}
+<style>
+  .result-wrap { max-width:700px; margin:0 auto; }
+  .score-hero { background:linear-gradient(135deg,#0F172A,#1E1B4B); border-radius:20px; padding:3rem; text-align:center; color:white; margin-bottom:2rem; }
+  .score-circle { width:120px; height:120px; border-radius:50%; margin:0 auto 1.5rem; display:flex; align-items:center; justify-content:center; flex-direction:column; border:4px solid; }
+  .score-circle.pass { border-color:#10B981; background:rgba(16,185,129,.15); }
+  .score-circle.fail { border-color:#EF4444; background:rgba(239,68,68,.15); }
+  .score-pct { font-family:'Syne',sans-serif; font-size:2.2rem; font-weight:800; }
+  .score-lbl { font-size:.75rem; opacity:.7; }
+  .score-hero h2 { font-size:1.5rem; margin-bottom:.4rem; }
+  .score-hero p { opacity:.75; }
+  .result-item { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:1.2rem 1.5rem; margin-bottom:.8rem; box-shadow:var(--shadow); }
+  .result-item.correct { border-left:4px solid #10B981; }
+  .result-item.wrong   { border-left:4px solid #EF4444; }
+  .ri-top { display:flex; align-items:flex-start; gap:.8rem; margin-bottom:.8rem; }
+  .ri-icon { width:28px; height:28px; border-radius:8px; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:13px; }
+  .correct .ri-icon { background:#D1FAE5; color:#059669; }
+  .wrong   .ri-icon { background:#FEE2E2; color:#DC2626; }
+  .ri-q { font-weight:600; font-size:.95rem; }
+  .ri-answers { display:flex; gap:1rem; font-size:.85rem; flex-wrap:wrap; }
+  .ans-your { color:#DC2626; } .ans-right { color:#059669; }
+  .result-actions { display:flex; gap:10px; justify-content:center; margin-top:2rem; }
+</style>
+{% endblock %}
+{% block content %}
+<div class="result-wrap">
+  <div class="score-hero">
+    <div class="score-circle {% if pct >= 50 %}pass{% else %}fail{% endif %}">
+      <span class="score-pct">{{ pct }}%</span>
+      <span class="score-lbl">{{ score }}/{{ total }}</span>
+    </div>
+    <h2>{% if pct >= 80 %}Excellent! 🎉{% elif pct >= 50 %}Good Job! 👍{% else %}Keep Practising 💪{% endif %}</h2>
+    <p>You scored {{ score }} out of {{ total }} in <strong>{{ subject }}</strong></p>
+  </div>
+  <h3 style="margin-bottom:1rem">Detailed Review</h3>
+  {% for r in results %}
+  <div class="result-item {% if r.correct %}correct{% else %}wrong{% endif %}">
+    <div class="ri-top">
+      <div class="ri-icon"><i class="fas fa-{% if r.correct %}check{% else %}times{% endif %}"></i></div>
+      <div class="ri-q">{{ r.question }}</div>
+    </div>
+    <div class="ri-answers">
+      {% if not r.correct %}<span class="ans-your"><i class="fas fa-times-circle"></i> Your answer: {{ r.user }}</span>{% endif %}
+      <span class="ans-right"><i class="fas fa-check-circle"></i> Correct: {{ r.answer }}</span>
+    </div>
+  </div>
+  {% endfor %}
+  <div class="result-actions">
+    <a href="/quiz/{{ subject }}" class="btn btn-primary"><i class="fas fa-redo"></i> Retry Quiz</a>
+    <a href="/quiz" class="btn btn-outline"><i class="fas fa-list"></i> All Quizzes</a>
+    <a href="/" class="btn btn-outline"><i class="fas fa-home"></i> Home</a>
+  </div>
+</div>
+{% endblock %}

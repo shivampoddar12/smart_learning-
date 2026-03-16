@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% block title %}Admin Panel – Smart Learning{% endblock %}
+{% block extra_css %}
+<style>
+  .admin-grid { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; margin-bottom:1.5rem; }
+  .admin-stat { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:1.2rem 1.5rem; display:flex; align-items:center; gap:1rem; }
+  .as-icon { width:44px; height:44px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:20px; }
+  .as-num { font-family:'Syne',sans-serif; font-size:1.6rem; font-weight:800; }
+  .as-lbl { font-size:.8rem; color:var(--text2); }
+  .tab-bar { display:flex; gap:4px; border-bottom:2px solid var(--border); margin-bottom:1.5rem; }
+  .tab-btn { padding:10px 20px; border:none; background:none; color:var(--text2); cursor:pointer; font-weight:600; font-size:.9rem; border-bottom:2px solid transparent; margin-bottom:-2px; transition:all .2s; font-family:'DM Sans',sans-serif; }
+  .tab-btn.active { color:var(--primary); border-bottom-color:var(--primary); }
+  .tab-panel { display:none; }
+  .tab-panel.active { display:block; }
+  .data-table { width:100%; border-collapse:collapse; }
+  .data-table th { text-align:left; padding:10px 14px; font-size:.82rem; color:var(--text2); border-bottom:2px solid var(--border); font-weight:600; text-transform:uppercase; letter-spacing:.3px; }
+  .data-table td { padding:12px 14px; border-bottom:1px solid var(--border); font-size:.9rem; }
+  .data-table tr:last-child td { border-bottom:none; }
+  .upload-form { background:var(--bg2); border:2px dashed var(--border); border-radius:14px; padding:2rem; }
+  .upload-form:hover { border-color:var(--primary); }
+  .ug { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+</style>
+{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1><i class="fas fa-cog" style="margin-right:.6rem"></i>Admin Panel</h1>
+  <p>Manage study materials, review feedback, and monitor student performance</p>
+</div>
+<div class="admin-grid">
+  <div class="admin-stat"><div class="as-icon" style="background:#DBEAFE;color:#2563EB"><i class="fas fa-file"></i></div><div><div class="as-num">{{ materials|length }}</div><div class="as-lbl">Total Materials</div></div></div>
+  <div class="admin-stat"><div class="as-icon" style="background:#D1FAE5;color:#059669"><i class="fas fa-comment"></i></div><div><div class="as-num">{{ feedbacks|length }}</div><div class="as-lbl">Feedbacks</div></div></div>
+  <div class="admin-stat"><div class="as-icon" style="background:#FEE2E2;color:#DC2626"><i class="fas fa-exclamation-circle"></i></div><div><div class="as-num">{{ complaints|length }}</div><div class="as-lbl">Complaints</div></div></div>
+  <div class="admin-stat"><div class="as-icon" style="background:#EDE9FE;color:#7C3AED"><i class="fas fa-trophy"></i></div><div><div class="as-num">{{ scores|length }}</div><div class="as-lbl">Quiz Attempts</div></div></div>
+</div>
+<div class="tab-bar">
+  <button class="tab-btn active" onclick="showTab('upload')">Upload Material</button>
+  <button class="tab-btn" onclick="showTab('materials')">All Materials</button>
+  <button class="tab-btn" onclick="showTab('feedback')">Feedback</button>
+  <button class="tab-btn" onclick="showTab('complaints')">Complaints</button>
+  <button class="tab-btn" onclick="showTab('scores')">Quiz Scores</button>
+</div>
+
+<div id="tab-upload" class="tab-panel active">
+  <div class="card">
+    <h3 style="margin-bottom:1.2rem">Upload New Study Material</h3>
+    <form method="POST" action="/admin/upload" enctype="multipart/form-data" class="upload-form">
+      <div class="ug">
+        <div class="form-group"><label>Semester</label><select name="semester" class="form-control" required><option value="">Select Semester</option>{% for s in range(1,9) %}<option value="{{ s }}">Semester {{ s }}</option>{% endfor %}</select></div>
+        <div class="form-group"><label>Subject Name</label><input type="text" name="subject" class="form-control" placeholder="e.g. Data Structures" required></div>
+        <div class="form-group"><label>Unit Number</label><input type="number" name="unit" class="form-control" placeholder="1" min="1" max="10" required></div>
+        <div class="form-group"><label>Title / Topic</label><input type="text" name="title" class="form-control" placeholder="e.g. Linked Lists" required></div>
+      </div>
+      <div class="form-group"><label>Upload PDF</label><input type="file" name="pdf" class="form-control" accept=".pdf"></div>
+      <button type="submit" class="btn btn-primary"><i class="fas fa-upload"></i> Upload Material</button>
+    </form>
+  </div>
+</div>
+
+<div id="tab-materials" class="tab-panel">
+  <div class="card" style="padding:0;overflow:hidden">
+    <table class="data-table">
+      <thead><tr><th>#</th><th>Title</th><th>Subject</th><th>Semester</th><th>Unit</th><th>Date</th><th>PDF</th></tr></thead>
+      <tbody>{% for m in materials %}<tr><td>{{ m.id }}</td><td><strong>{{ m.title }}</strong></td><td>{{ m.subject }}</td><td><span class="badge badge-blue">Sem {{ m.semester }}</span></td><td>Unit {{ m.unit }}</td><td>{{ m.uploaded }}</td><td>{% if m.filename %}<span class="badge badge-green">Uploaded</span>{% else %}<span class="badge badge-orange">Pending</span>{% endif %}</td></tr>{% endfor %}</tbody>
+    </table>
+  </div>
+</div>
+
+<div id="tab-feedback" class="tab-panel">
+  {% if feedbacks %}
+  <div class="card" style="padding:0;overflow:hidden">
+    <table class="data-table">
+      <thead><tr><th>Name</th><th>Type</th><th>Message</th><th>Rating</th><th>Date</th><th>Status</th></tr></thead>
+      <tbody>{% for f in feedbacks %}<tr><td>{{ f.name }}</td><td><span class="badge badge-blue">{{ f.type|title }}</span></td><td style="max-width:200px">{{ f.message[:80] }}{% if f.message|length > 80 %}...{% endif %}</td><td>{% for i in range(f.rating|int) %}⭐{% endfor %}</td><td>{{ f.date }}</td><td><span class="badge badge-orange">{{ f.status }}</span></td></tr>{% endfor %}</tbody>
+    </table>
+  </div>
+  {% else %}<div style="text-align:center;padding:3rem;color:var(--text2)"><i class="fas fa-inbox" style="font-size:2rem;opacity:.3;display:block;margin-bottom:.8rem"></i>No feedback yet</div>{% endif %}
+</div>
+
+<div id="tab-complaints" class="tab-panel">
+  {% if complaints %}
+  <div class="card" style="padding:0;overflow:hidden">
+    <table class="data-table">
+      <thead><tr><th>Name</th><th>Message</th><th>Date</th><th>Status</th></tr></thead>
+      <tbody>{% for c in complaints %}<tr><td>{{ c.name }}</td><td style="max-width:300px">{{ c.message[:100] }}{% if c.message|length > 100 %}...{% endif %}</td><td>{{ c.date }}</td><td><span class="badge badge-orange">{{ c.status }}</span></td></tr>{% endfor %}</tbody>
+    </table>
+  </div>
+  {% else %}<div style="text-align:center;padding:3rem;color:var(--text2)"><i class="fas fa-check-circle" style="font-size:2rem;opacity:.3;display:block;margin-bottom:.8rem"></i>No complaints yet</div>{% endif %}
+</div>
+
+<div id="tab-scores" class="tab-panel">
+  {% if scores %}
+  <div class="card" style="padding:0;overflow:hidden">
+    <table class="data-table">
+      <thead><tr><th>Subject</th><th>Score</th><th>Percentage</th><th>Date</th></tr></thead>
+      <tbody>{% for s in scores %}<tr><td><strong>{{ s.subject }}</strong></td><td>{{ s.score }}/{{ s.total }}</td><td><span class="badge {% if s.pct >= 70 %}badge-green{% elif s.pct >= 50 %}badge-orange{% else %}badge-blue{% endif %}">{{ s.pct }}%</span></td><td>{{ s.date }}</td></tr>{% endfor %}</tbody>
+    </table>
+  </div>
+  {% else %}<div style="text-align:center;padding:3rem;color:var(--text2)"><i class="fas fa-chart-bar" style="font-size:2rem;opacity:.3;display:block;margin-bottom:.8rem"></i>No quiz attempts yet</div>{% endif %}
+</div>
+{% endblock %}
+{% block extra_js %}
+<script>
+function showTab(name) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
+{% endblock %}

@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>{% block title %}Smart Learning{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    :root {
+      --primary: #2563EB;
+      --primary-dark: #1d4ed8;
+      --accent: #06B6D4;
+      --accent2: #8B5CF6;
+      --bg: #F8FAFF;
+      --bg2: #EFF4FF;
+      --card: #FFFFFF;
+      --border: #E2E8F0;
+      --text: #0F172A;
+      --text2: #475569;
+      --text3: #94A3B8;
+      --success: #10B981;
+      --warning: #F59E0B;
+      --danger: #EF4444;
+      --nav-bg: #0F172A;
+      --nav-text: #E2E8F0;
+      --shadow: 0 4px 24px rgba(37,99,235,0.08);
+      --shadow-lg: 0 8px 40px rgba(37,99,235,0.14);
+      --radius: 14px;
+      --transition: 0.22s cubic-bezier(.4,0,.2,1);
+    }
+    [data-theme="dark"] {
+      --bg: #0A0F1E;
+      --bg2: #111827;
+      --card: #1E293B;
+      --border: #334155;
+      --text: #F1F5F9;
+      --text2: #94A3B8;
+      --text3: #475569;
+      --shadow: 0 4px 24px rgba(0,0,0,0.4);
+      --shadow-lg: 0 8px 40px rgba(0,0,0,0.5);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      transition: background var(--transition), color var(--transition);
+    }
+    h1,h2,h3,h4 { font-family: 'Syne', sans-serif; }
+
+    /* ── NAV ── */
+    nav {
+      background: var(--nav-bg);
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+      position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    .nav-brand {
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none;
+    }
+    .nav-logo {
+      width: 36px; height: 36px; border-radius: 10px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; color: white;
+    }
+    .nav-brand-text {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800; font-size: 1.1rem;
+      color: white; letter-spacing: -0.3px;
+    }
+    .nav-brand-text span { color: var(--accent); }
+    .nav-links { display: flex; align-items: center; gap: 4px; }
+    .nav-links a {
+      color: var(--nav-text); text-decoration: none;
+      padding: 6px 14px; border-radius: 8px;
+      font-size: 0.88rem; font-weight: 500;
+      transition: background var(--transition), color var(--transition);
+    }
+    .nav-links a:hover, .nav-links a.active {
+      background: rgba(255,255,255,0.1); color: white;
+    }
+    .nav-links a.active { color: var(--accent); }
+    .theme-btn {
+      background: rgba(255,255,255,0.1);
+      border: none; color: white; cursor: pointer;
+      width: 38px; height: 38px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; transition: background var(--transition);
+      margin-left: 8px;
+    }
+    .theme-btn:hover { background: rgba(255,255,255,0.2); }
+
+    /* ── MAIN ── */
+    main { max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem; }
+
+    /* ── CARDS ── */
+    .card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1.5rem;
+      box-shadow: var(--shadow);
+      transition: transform var(--transition), box-shadow var(--transition);
+    }
+    .card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+
+    /* ── BUTTONS ── */
+    .btn {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 10px 20px; border-radius: 10px;
+      font-family: 'DM Sans', sans-serif; font-weight: 600;
+      font-size: 0.9rem; border: none; cursor: pointer;
+      text-decoration: none; transition: all var(--transition);
+    }
+    .btn-primary {
+      background: var(--primary); color: white;
+    }
+    .btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); }
+    .btn-outline {
+      background: transparent; color: var(--primary);
+      border: 2px solid var(--primary);
+    }
+    .btn-outline:hover { background: var(--primary); color: white; }
+    .btn-accent {
+      background: linear-gradient(135deg, var(--primary), var(--accent2));
+      color: white;
+    }
+    .btn-accent:hover { opacity: 0.9; transform: translateY(-1px); }
+    .btn-sm { padding: 6px 14px; font-size: 0.82rem; }
+
+    /* ── BADGES ── */
+    .badge {
+      display: inline-block; padding: 3px 10px; border-radius: 20px;
+      font-size: 0.75rem; font-weight: 600;
+    }
+    .badge-blue { background: #DBEAFE; color: #1d4ed8; }
+    .badge-green { background: #D1FAE5; color: #065f46; }
+    .badge-purple { background: #EDE9FE; color: #5b21b6; }
+    .badge-orange { background: #FEF3C7; color: #92400e; }
+    [data-theme="dark"] .badge-blue { background: #1e3a5f; color: #93c5fd; }
+    [data-theme="dark"] .badge-green { background: #064e3b; color: #6ee7b7; }
+    [data-theme="dark"] .badge-purple { background: #3b0764; color: #c4b5fd; }
+    [data-theme="dark"] .badge-orange { background: #78350f; color: #fcd34d; }
+
+    /* ── FLASH ── */
+    .flash-container { max-width: 1200px; margin: 0.75rem auto; padding: 0 1.5rem; }
+    .flash {
+      padding: 12px 18px; border-radius: 10px; font-weight: 500;
+      display: flex; align-items: center; gap: 10px;
+      animation: slideIn 0.3s ease;
+    }
+    .flash-success { background: #D1FAE5; color: #065f46; border-left: 4px solid #10B981; }
+    .flash-error   { background: #FEE2E2; color: #991b1b; border-left: 4px solid #EF4444; }
+    [data-theme="dark"] .flash-success { background: #064e3b; color: #6ee7b7; }
+    [data-theme="dark"] .flash-error   { background: #7f1d1d; color: #fca5a5; }
+    @keyframes slideIn { from { opacity:0; transform:translateY(-8px); } to { opacity:1; transform:translateY(0); } }
+
+    /* ── PAGE HEADER ── */
+    .page-header {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--accent2) 100%);
+      border-radius: 20px; padding: 2.5rem 2rem;
+      color: white; margin-bottom: 2rem; position: relative; overflow: hidden;
+    }
+    .page-header::before {
+      content: ''; position: absolute; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Ccircle cx='30' cy='30' r='20'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .page-header h1 { font-size: 1.9rem; margin-bottom: 0.4rem; position: relative; }
+    .page-header p  { opacity: 0.85; position: relative; }
+
+    /* ── FORM ── */
+    .form-group { margin-bottom: 1.2rem; }
+    .form-group label { display: block; font-weight: 600; font-size: 0.88rem; color: var(--text2); margin-bottom: 6px; }
+    .form-control {
+      width: 100%; padding: 10px 14px; border-radius: 10px;
+      border: 2px solid var(--border); background: var(--bg);
+      color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 0.92rem;
+      transition: border-color var(--transition);
+    }
+    .form-control:focus { outline: none; border-color: var(--primary); }
+    select.form-control { cursor: pointer; }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center; padding: 1.5rem;
+      color: var(--text3); font-size: 0.82rem;
+      border-top: 1px solid var(--border); margin-top: 3rem;
+    }
+  </style>
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-brand">
+    <div class="nav-logo"><i class="fas fa-brain"></i></div>
+    <span class="nav-brand-text">Smart<span>Learning</span></span>
+  </a>
+  <div class="nav-links">
+    <a href="/" class="{% if request.endpoint=='index' %}active{% endif %}">
+      <i class="fas fa-home"></i> Home
+    </a>
+    <a href="/study-material" class="{% if request.endpoint=='study_material' %}active{% endif %}">
+      <i class="fas fa-book"></i> Materials
+    </a>
+    <a href="/quiz" class="{% if 'quiz' in request.endpoint %}active{% endif %}">
+      <i class="fas fa-clipboard-check"></i> Quiz
+    </a>
+    <a href="/feedback" class="{% if request.endpoint=='feedback' %}active{% endif %}">
+      <i class="fas fa-comment-dots"></i> Feedback
+    </a>
+    <a href="/ai/explain" class="{% if 'ai' in request.endpoint %}active{% endif %}">
+      <i class="fas fa-brain"></i> AI Tools
+    </a>
+    <a href="/admin" class="{% if request.endpoint=='admin' %}active{% endif %}">
+      <i class="fas fa-cog"></i> Admin
+    </a>
+    {% if current_user %}
+      <a href="{{ url_for('auth.profile') }}" class="nav-links" style="text-decoration:none;display:flex;align-items:center;gap:7px;padding:5px 12px;border-radius:10px;background:rgba(255,255,255,.08);color:white;font-size:.85rem;font-weight:600;margin-left:4px">
+        <div style="width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,#2563EB,#8B5CF6);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700">
+          {{ current_user.name[0].upper() }}
+        </div>
+        {{ current_user.name.split()[0] }}
+      </a>
+    {% else %}
+      <a href="{{ url_for('auth.login') }}" class="btn btn-outline btn-sm" style="color:white;border-color:rgba(255,255,255,.3);margin-left:4px">
+        <i class="fas fa-sign-in-alt"></i> Login
+      </a>
+    {% endif %}
+    <button class="theme-btn" onclick="toggleTheme()" title="Toggle Dark Mode">
+      <i class="fas fa-moon" id="theme-icon"></i>
+    </button>
+  </div>
+</nav>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+  <div class="flash-container">
+    {% for cat, msg in messages %}
+      <div class="flash flash-{{ cat }}">
+        <i class="fas fa-{% if cat=='success' %}check-circle{% else %}exclamation-circle{% endif %}"></i>
+        {{ msg }}
+      </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+{% endwith %}
+
+<main>{% block content %}{% endblock %}</main>
+
+<footer>
+  <p>Smart Learning &copy; 2024 &nbsp;·&nbsp; B.Tech Minor Project &nbsp;·&nbsp; Built with Flask + AI</p>
+</footer>
+
+<script>
+  const savedTheme = localStorage.getItem('theme') || 'light';
+  document.documentElement.setAttribute('data-theme', savedTheme);
+  updateIcon(savedTheme);
+
+  function toggleTheme() {
+    const cur = document.documentElement.getAttribute('data-theme');
+    const next = cur === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+    updateIcon(next);
+  }
+  function updateIcon(theme) {
+    const icon = document.getElementById('theme-icon');
+    if (icon) icon.className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+  }
+</script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

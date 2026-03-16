@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% block title %}Register – Smart Learning{% endblock %}
+{% block extra_css %}
+<style>
+  .auth-wrap { max-width:480px; margin:3rem auto; }
+  .auth-card { background:var(--card); border:1px solid var(--border); border-radius:20px; padding:2.5rem; box-shadow:var(--shadow-lg); }
+  .auth-logo { text-align:center; margin-bottom:1.8rem; }
+  .auth-logo .icon { width:64px; height:64px; border-radius:18px; background:linear-gradient(135deg,#2563EB,#06B6D4); display:flex; align-items:center; justify-content:center; font-size:28px; color:white; margin:0 auto 1rem; }
+  .auth-logo h2 { font-size:1.4rem; }
+  .auth-logo p  { font-size:.88rem; color:var(--text2); margin-top:4px; }
+  .divider { display:flex; align-items:center; gap:12px; margin:1.2rem 0; color:var(--text3); font-size:.82rem; }
+  .divider::before,.divider::after { content:''; flex:1; height:1px; background:var(--border); }
+  .auth-footer { text-align:center; margin-top:1.2rem; font-size:.88rem; color:var(--text2); }
+  .auth-footer a { color:var(--primary); font-weight:600; text-decoration:none; }
+  .strength-bar { height:4px; border-radius:2px; margin-top:6px; background:var(--border); transition:all .3s; }
+  .strength-fill { height:100%; border-radius:2px; width:0%; transition:all .3s; }
+  .input-icon-wrap { position:relative; }
+  .input-icon { position:absolute; left:12px; top:50%; transform:translateY(-50%); color:var(--text3); font-size:14px; }
+  .input-icon-wrap .form-control { padding-left:36px; }
+</style>
+{% endblock %}
+{% block content %}
+<div class="auth-wrap">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <div class="icon"><i class="fas fa-brain"></i></div>
+      <h2>Create your account</h2>
+      <p>Join Smart Learning — AI-powered study platform</p>
+    </div>
+
+    <form method="POST">
+      <div class="form-group">
+        <label>Full Name</label>
+        <div class="input-icon-wrap">
+          <i class="fas fa-user input-icon"></i>
+          <input type="text" name="name" class="form-control" placeholder="Your full name" value="{{ name or '' }}" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Email Address</label>
+        <div class="input-icon-wrap">
+          <i class="fas fa-envelope input-icon"></i>
+          <input type="email" name="email" class="form-control" placeholder="you@college.edu" value="{{ email or '' }}" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Semester</label>
+        <select name="semester" class="form-control">
+          {% for s in range(1,9) %}
+          <option value="{{ s }}" {% if semester|int == s %}selected{% endif %}>Semester {{ s }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <div class="input-icon-wrap">
+          <i class="fas fa-lock input-icon"></i>
+          <input type="password" name="password" id="pw" class="form-control" placeholder="Min. 6 characters" oninput="checkStrength(this.value)" required>
+        </div>
+        <div class="strength-bar"><div class="strength-fill" id="sfill"></div></div>
+      </div>
+      <div class="form-group">
+        <label>Confirm Password</label>
+        <div class="input-icon-wrap">
+          <i class="fas fa-lock input-icon"></i>
+          <input type="password" name="confirm" class="form-control" placeholder="Re-enter password" required>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary" style="width:100%;padding:12px;font-size:1rem;margin-top:.4rem">
+        <i class="fas fa-user-plus"></i> Create Account
+      </button>
+    </form>
+
+    <div class="divider">or</div>
+    <div class="auth-footer">
+      Already have an account? <a href="{{ url_for('auth.login') }}">Sign in here</a>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block extra_js %}
+<script>
+function checkStrength(pw) {
+  const fill = document.getElementById('sfill');
+  let score = 0;
+  if (pw.length >= 6)  score++;
+  if (pw.length >= 10) score++;
+  if (/[A-Z]/.test(pw)) score++;
+  if (/[0-9]/.test(pw)) score++;
+  if (/[^A-Za-z0-9]/.test(pw)) score++;
+  const colors = ['','#EF4444','#F59E0B','#F59E0B','#10B981','#10B981'];
+  fill.style.width  = (score * 20) + '%';
+  fill.style.background = colors[score] || '#EF4444';
+}
+</script>
+{% endblock %}

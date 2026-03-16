@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block title %}Feedback – Smart Learning{% endblock %}
+{% block extra_css %}
+<style>
+  .fb-grid { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; }
+  .star-row { display:flex; gap:6px; margin-top:6px; }
+  .star { font-size:1.4rem; cursor:pointer; color:var(--border); transition:color .15s; }
+  .star.active, .star:hover { color:#F59E0B; }
+  .fb-list { margin-top:1.5rem; }
+  .fb-item { background:var(--bg2); border-radius:12px; padding:1rem 1.2rem; margin-bottom:.8rem; border-left:3px solid var(--primary); }
+  .fb-item .meta { font-size:.8rem; color:var(--text3); margin-bottom:.4rem; }
+  .fb-item .msg { font-size:.92rem; }
+  @media(max-width:700px) { .fb-grid { grid-template-columns:1fr; } }
+</style>
+{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1><i class="fas fa-comment-dots" style="margin-right:.6rem"></i>Feedback &amp; Complaints</h1>
+  <p>Help us improve — share your thoughts or report any issues</p>
+</div>
+<div class="fb-grid">
+  <div class="card">
+    <h3 style="margin-bottom:1.2rem">Submit Feedback or Complaint</h3>
+    <form method="POST">
+      <div class="form-group">
+        <label>Your Name (Optional)</label>
+        <input type="text" name="name" class="form-control" placeholder="Anonymous">
+      </div>
+      <div class="form-group">
+        <label>Type</label>
+        <select name="type" class="form-control">
+          <option value="feedback">General Feedback</option>
+          <option value="material">Study Material Issue</option>
+          <option value="complaint">Complaint</option>
+          <option value="suggestion">Suggestion</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Rating</label>
+        <div class="star-row" id="stars">
+          {% for i in range(1,6) %}
+          <span class="star" data-val="{{ i }}" onclick="setRating({{ i }})">&#9733;</span>
+          {% endfor %}
+        </div>
+        <input type="hidden" name="rating" id="rating-val" value="5">
+      </div>
+      <div class="form-group">
+        <label>Message</label>
+        <textarea name="message" class="form-control" rows="4" placeholder="Write your feedback or complaint here..." required></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary" style="width:100%"><i class="fas fa-paper-plane"></i> Submit</button>
+    </form>
+  </div>
+  <div>
+    <div class="card" style="margin-bottom:1rem">
+      <h3 style="margin-bottom:1rem">How it Works</h3>
+      <div style="display:flex;flex-direction:column;gap:.8rem">
+        {% for step in [('1','Submit','You fill in the form and submit your feedback or complaint.','#2563EB'),('2','Stored','Your submission is saved and sent to the admin for review.','#7C3AED'),('3','Reviewed','Admin reviews and acts on your submission.','#059669'),('4','Improved','Content and platform quality keeps improving.','#D97706')] %}
+        <div style="display:flex;align-items:flex-start;gap:.8rem">
+          <div style="width:28px;height:28px;border-radius:50%;background:{{ step[3] }};color:white;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;flex-shrink:0">{{ step[0] }}</div>
+          <div><strong style="font-size:.9rem">{{ step[1] }}</strong><br><span style="font-size:.82rem;color:var(--text2)">{{ step[2] }}</span></div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% if feedbacks %}
+    <div class="card">
+      <h3 style="margin-bottom:1rem">Recent Feedback</h3>
+      {% for f in feedbacks %}
+      <div class="fb-item">
+        <div class="meta">{{ f.name }} &middot; {{ f.type|title }} &middot; {{ f.date }} &middot; ⭐ {{ f.rating }}</div>
+        <div class="msg">{{ f.message }}</div>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
+{% block extra_js %}
+<script>
+function setRating(val) {
+  document.getElementById('rating-val').value = val;
+  document.querySelectorAll('.star').forEach((s,i) => s.classList.toggle('active', i < val));
+}
+setRating(5);
+</script>
+{% endblock %}

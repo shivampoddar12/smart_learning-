@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}{{ subject }} Quiz{% endblock %}
+{% block extra_css %}
+<style>
+  .quiz-wrap { max-width:720px; margin:0 auto; }
+  .qcard { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:1.8rem; margin-bottom:1.2rem; box-shadow:var(--shadow); }
+  .qnum { font-size:.8rem; color:var(--text3); font-weight:600; text-transform:uppercase; letter-spacing:.5px; margin-bottom:.8rem; }
+  .qtxt { font-size:1.05rem; font-weight:600; margin-bottom:1.2rem; }
+  .opts { display:grid; gap:.7rem; }
+  .olabel { display:flex; align-items:center; gap:.8rem; padding:12px 16px; border-radius:10px; border:2px solid var(--border); cursor:pointer; transition:all .18s; }
+  .olabel:hover { border-color:var(--primary); background:var(--bg2); }
+  .olabel.selected { border-color:var(--primary); background:var(--bg2); }
+  .ocircle { width:28px; height:28px; border-radius:50%; border:2px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:.8rem; font-weight:700; flex-shrink:0; color:var(--text2); transition:all .18s; }
+  .olabel.selected .ocircle { background:var(--primary); border-color:var(--primary); color:white; }
+  .olabel.selected .otxt { color:var(--primary); font-weight:600; }
+  .subbar { text-align:center; margin-top:2rem; }
+</style>
+{% endblock %}
+{% block content %}
+<div class="quiz-wrap">
+  <div class="page-header">
+    <h1><i class="fas fa-clipboard-check" style="margin-right:.6rem"></i>{{ subject }}</h1>
+    <p>{{ questions|length }} questions &middot; Select the best answer for each question</p>
+  </div>
+  <form method="POST" action="/quiz/{{ subject }}/submit">
+    {% for q in questions %}
+    {% set qi = loop.index0 %}
+    <div class="qcard">
+      <div class="qnum">Question {{ loop.index }} of {{ questions|length }}</div>
+      <div class="qtxt">{{ q.q }}</div>
+      <div class="opts">
+        {% for opt in q.options %}
+        <label class="olabel" onclick="selectOpt(this, 'q{{ qi }}')">
+          <div class="ocircle">{{ loop.index }}</div>
+          <input type="radio" name="q{{ qi }}" value="{{ loop.index0 }}" style="display:none">
+          <span class="otxt">{{ opt }}</span>
+        </label>
+        {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+    <div class="subbar">
+      <button type="submit" class="btn btn-accent" style="padding:14px 40px;font-size:1rem">Submit Quiz <i class="fas fa-paper-plane"></i></button>
+    </div>
+  </form>
+</div>
+{% endblock %}
+{% block extra_js %}
+<script>
+function selectOpt(el, name) {
+  document.querySelectorAll('[onclick*="' + name + '"]').forEach(l => l.classList.remove('selected'));
+  el.classList.add('selected');
+  el.querySelector('input[type=radio]').checked = true;
+}
+</script>
+{% endblock %}
