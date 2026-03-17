@@ -269,6 +269,30 @@ img {
   align-items: center;
   gap: 4px;
 }
+    /* ☰ MENU BUTTON FIX */
+.menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* 📱 MOBILE */
+@media (max-width: 768px) {
+  .menu-btn {
+    display: block;
+  }
+
+  .nav-links {
+    display: none;
+  }
+}
+    /* OPTIONAL ALIGN FIX */
+.menu-btn {
+  margin-left: 10px;
+}
   </style>
   {% block extra_css %}{% endblock %}
 </head>
@@ -279,6 +303,9 @@ img {
     <div class="nav-logo"><i class="fas fa-brain"></i></div>
     <span class="nav-brand-text">Smart<span>Learning</span></span>
   </a>
+  <button class="menu-btn" onclick="openMenu()">
+  <i class="fas fa-bars"></i>
+</button>
   <div class="nav-links">
     <a href="/" class="{% if request.endpoint=='index' %}active{% endif %}">
       <i class="fas fa-home"></i> Home
@@ -351,6 +378,9 @@ img {
     const icon = document.getElementById('theme-icon');
     if (icon) icon.className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
   }
+function openMenu() {
+  console.log("menu clicked");
+}
 </script>
 {% block extra_js %}{% endblock %}
 </body>
