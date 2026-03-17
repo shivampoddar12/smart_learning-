@@ -63,21 +63,25 @@
   @media(max-width:600px) { .hero{padding:2.5rem 1.5rem} .hero h1{font-size:2.2rem} .feat-grid{grid-template-columns:1fr} }
   /* tumhara pura CSS */
 
-   /* 🔥 FORCE FIX (FINAL WORKING) */
+  /* 🔥 OVERFLOW FIX FINAL */
 
 .stats-bar {
   display: grid !important;
   grid-template-columns: repeat(4, 1fr) !important;
-  gap: 20px !important;
+  gap: 16px !important;
+  width: 100%;
+  max-width: 100%;
+}
+
+.stat-card {
+  width: 100% !important;
+  box-sizing: border-box;
 }
 
 @media (max-width: 768px) {
   .stats-bar {
     grid-template-columns: 1fr 1fr !important;
-  }
-
-  .stat-card {
-    width: 100% !important;
+    padding: 0 10px;
   }
 }
 </style>
