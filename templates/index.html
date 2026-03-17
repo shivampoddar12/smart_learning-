@@ -1,1 +1,125 @@
-<h1>Smart Learning Live 🚀</h1>
+{% extends "base.html" %}
+{% block title %}Smart Learning – AI-Based Web Learning Platform{% endblock %}
+{% block extra_css %}
+<style>
+  .hero { position:relative; overflow:hidden; background:linear-gradient(135deg,#0F172A 0%,#1E1B4B 50%,#0C1A3A 100%); border-radius:24px; padding:4.5rem 3rem; margin-bottom:3rem; display:grid; grid-template-columns:1fr 1fr; gap:2rem; align-items:center; }
+  .hero::before { content:''; position:absolute; inset:0; pointer-events:none; background: radial-gradient(ellipse 60% 60% at 80% 50%,rgba(6,182,212,.12) 0%,transparent 70%), radial-gradient(ellipse 40% 40% at 20% 80%,rgba(37,99,235,.15) 0%,transparent 60%); }
+  .hero-content { position:relative; z-index:2; }
+  .hero-badge { display:inline-flex; align-items:center; gap:7px; background:rgba(6,182,212,.15); border:1px solid rgba(6,182,212,.3); color:#67E8F9; padding:5px 14px; border-radius:20px; font-size:.78rem; font-weight:600; margin-bottom:1.2rem; }
+  .hero-badge .dot { width:6px; height:6px; border-radius:50%; background:#06B6D4; animation:pulse 2s infinite; display:inline-block; }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.6;transform:scale(1.4)} }
+  .hero h1 { font-size:3rem; line-height:1.1; color:white; margin-bottom:1.2rem; font-weight:800; }
+  .highlight { background:linear-gradient(90deg,#06B6D4,#8B5CF6); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  .hero p { color:#94A3B8; font-size:1.05rem; line-height:1.7; margin-bottom:2rem; }
+  .hero-actions { display:flex; gap:12px; flex-wrap:wrap; }
+  .btn-hp { background:linear-gradient(135deg,#2563EB,#06B6D4); color:white; padding:13px 28px; border-radius:12px; font-weight:700; text-decoration:none; display:inline-flex; align-items:center; gap:8px; box-shadow:0 4px 20px rgba(37,99,235,.4); transition:all .22s; }
+  .btn-hp:hover { transform:translateY(-2px); box-shadow:0 8px 28px rgba(37,99,235,.5); }
+  .btn-hs { background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.2); color:white; padding:13px 28px; border-radius:12px; font-weight:600; text-decoration:none; display:inline-flex; align-items:center; gap:8px; transition:all .22s; }
+  .btn-hs:hover { background:rgba(255,255,255,.14); transform:translateY(-2px); }
+  .hero-visual { position:relative; z-index:2; }
+  .hero-card-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .hmc { background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.1); border-radius:14px; padding:16px; text-align:center; transition:transform .22s; }
+  .hmc:hover { transform:translateY(-3px); }
+  .hmc .icon { width:40px; height:40px; border-radius:10px; margin:0 auto 8px; display:flex; align-items:center; justify-content:center; font-size:18px; }
+  .hmc .num { font-family:'Syne',sans-serif; font-size:1.5rem; font-weight:800; color:white; }
+  .hmc .lbl { font-size:.75rem; color:#94A3B8; margin-top:2px; }
+  .stats-bar { display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; margin-bottom:3rem; }
+  .stat-card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:1.5rem; display:flex; align-items:center; gap:1rem; box-shadow:var(--shadow); transition:transform .22s,box-shadow .22s; }
+  .stat-card:hover { transform:translateY(-3px); box-shadow:var(--shadow-lg); }
+  .stat-icon { width:48px; height:48px; border-radius:12px; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:22px; }
+  .si-bl { background:#DBEAFE; color:#2563EB; } .si-cy { background:#CFFAFE; color:#0891B2; } .si-pu { background:#EDE9FE; color:#7C3AED; } .si-gr { background:#D1FAE5; color:#059669; }
+  [data-theme="dark"] .si-bl { background:#1e3a5f; color:#60a5fa; } [data-theme="dark"] .si-cy { background:#0c3a42; color:#22d3ee; } [data-theme="dark"] .si-pu { background:#2e1065; color:#a78bfa; } [data-theme="dark"] .si-gr { background:#022c22; color:#34d399; }
+  .stat-num { font-family:'Syne',sans-serif; font-size:1.8rem; font-weight:800; color:var(--text); }
+  .stat-lbl { font-size:.82rem; color:var(--text2); margin-top:1px; }
+  .sec-title { margin-bottom:1.5rem; }
+  .sec-title h2 { font-size:1.5rem; }
+  .sec-title p { color:var(--text2); font-size:.9rem; margin-top:4px; }
+  .feat-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.2rem; margin-bottom:3rem; }
+  .fc { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:1.6rem; text-decoration:none; color:var(--text); box-shadow:var(--shadow); transition:transform .22s,box-shadow .22s; position:relative; overflow:hidden; }
+  .fc::after { content:''; position:absolute; bottom:0; left:0; right:0; height:3px; background:var(--fc,var(--primary)); transform:scaleX(0); transform-origin:left; transition:transform .3s; }
+  .fc:hover { transform:translateY(-4px); box-shadow:var(--shadow-lg); }
+  .fc:hover::after { transform:scaleX(1); }
+  .fc .fi { width:50px; height:50px; border-radius:14px; margin-bottom:1rem; display:flex; align-items:center; justify-content:center; font-size:22px; background:var(--fb,#DBEAFE); color:var(--fc,#2563EB); }
+  .fc h3 { font-size:1.05rem; margin-bottom:6px; }
+  .fc p { color:var(--text2); font-size:.86rem; line-height:1.6; }
+  .fc .arr { position:absolute; top:1.5rem; right:1.5rem; color:var(--text3); transition:transform .22s,color .22s; }
+  .fc:hover .arr { transform:translate(3px,-3px); color:var(--fc,var(--primary)); }
+  .quick-grid { display:grid; grid-template-columns:2fr 1fr; gap:1.5rem; margin-bottom:3rem; }
+  .rl { list-style:none; }
+  .rl li { display:flex; align-items:center; gap:12px; padding:12px 0; border-bottom:1px solid var(--border); }
+  .rl li:last-child { border-bottom:none; }
+  .ri { width:36px; height:36px; border-radius:8px; background:#DBEAFE; color:#2563EB; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:14px; }
+  [data-theme="dark"] .ri { background:#1e3a5f; }
+  .rt .t { font-weight:600; font-size:.9rem; }
+  .rt .m { font-size:.78rem; color:var(--text3); margin-top:1px; }
+  .qa { display:flex; flex-direction:column; gap:10px; }
+  .qab { display:flex; align-items:center; gap:12px; padding:14px 16px; border-radius:12px; text-decoration:none; font-weight:600; font-size:.9rem; color:white; transition:transform .22s,box-shadow .22s; }
+  .qab:hover { transform:translateY(-2px); box-shadow:0 6px 20px rgba(0,0,0,.2); }
+  .qab.b1 { background:linear-gradient(135deg,#2563EB,#3B82F6); }
+  .qab.b2 { background:linear-gradient(135deg,#1d4ed8,#2563EB); }
+  .qab.pu { background:linear-gradient(135deg,#7C3AED,#8B5CF6); }
+  .qab.gr { background:linear-gradient(135deg,#059669,#10B981); }
+  @media(max-width:900px) { .hero{grid-template-columns:1fr} .hero-visual{display:none} .stats-bar{grid-template-columns:1fr 1fr} .feat-grid{grid-template-columns:1fr 1fr} .quick-grid{grid-template-columns:1fr} }
+  @media(max-width:600px) { .hero{padding:2.5rem 1.5rem} .hero h1{font-size:2.2rem} .feat-grid{grid-template-columns:1fr} }
+</style>
+{% endblock %}
+{% block content %}
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-badge"><span class="dot"></span> AI-Powered Education Platform</div>
+    <h1>Learn Smarter,<br><span class="highlight">Not Harder</span></h1>
+    <p>An intelligent web learning platform for B.Tech students — organized study materials, AI-based explanations, interactive quizzes, and instant feedback.</p>
+    <div class="hero-actions">
+      <a href="/study-material" class="btn-hp"><i class="fas fa-book-open"></i> Explore Materials</a>
+      <a href="/quiz" class="btn-hs"><i class="fas fa-play"></i> Take a Quiz</a>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="hero-card-grid">
+      <div class="hmc"><div class="icon" style="background:rgba(37,99,235,.2);color:#60a5fa"><i class="fas fa-book"></i></div><div class="num">{{ stats.materials }}+</div><div class="lbl">Study Materials</div></div>
+      <div class="hmc"><div class="icon" style="background:rgba(6,182,212,.2);color:#22d3ee"><i class="fas fa-clipboard-check"></i></div><div class="num">{{ stats.quizzes }}+</div><div class="lbl">Quiz Questions</div></div>
+      <div class="hmc"><div class="icon" style="background:rgba(139,92,246,.2);color:#a78bfa"><i class="fas fa-brain"></i></div><div class="num">AI</div><div class="lbl">Smart Explanations</div></div>
+      <div class="hmc"><div class="icon" style="background:rgba(16,185,129,.2);color:#34d399"><i class="fas fa-moon"></i></div><div class="num">Dark</div><div class="lbl">Mode Supported</div></div>
+    </div>
+  </div>
+</section>
+<div class="stats-bar">
+  <div class="stat-card"><div class="stat-icon si-bl"><i class="fas fa-file-pdf"></i></div><div><div class="stat-num">{{ stats.materials }}</div><div class="stat-lbl">Study Materials</div></div></div>
+  <div class="stat-card"><div class="stat-icon si-cy"><i class="fas fa-layer-group"></i></div><div><div class="stat-num">{{ stats.subjects }}</div><div class="stat-lbl">Subjects Covered</div></div></div>
+  <div class="stat-card"><div class="stat-icon si-pu"><i class="fas fa-question-circle"></i></div><div><div class="stat-num">{{ stats.quizzes }}</div><div class="stat-lbl">Quiz Questions</div></div></div>
+  <div class="stat-card"><div class="stat-icon si-gr"><i class="fas fa-comment-alt"></i></div><div><div class="stat-num">{{ stats.feedbacks }}</div><div class="stat-lbl">Feedbacks Received</div></div></div>
+</div>
+<div class="sec-title"><h2>Platform Features</h2><p>Everything you need to ace your exams — right here.</p></div>
+<div class="feat-grid">
+  <a href="/study-material" class="fc" style="--fc:#2563EB;--fb:#DBEAFE"><div class="fi"><i class="fas fa-book-open"></i></div><span class="arr"><i class="fas fa-arrow-up-right"></i></span><h3>Study Materials</h3><p>Semester-wise and unit-wise notes, PDFs, and important questions — organized and searchable.</p></a>
+  <a href="/quiz" class="fc" style="--fc:#7C3AED;--fb:#EDE9FE"><div class="fi"><i class="fas fa-clipboard-check"></i></div><span class="arr"><i class="fas fa-arrow-up-right"></i></span><h3>Tests &amp; Quizzes</h3><p>Unit-wise MCQ quizzes with instant scoring. Test yourself and identify weak areas before exams.</p></a>
+  <a href="/feedback" class="fc" style="--fc:#059669;--fb:#D1FAE5"><div class="fi"><i class="fas fa-comment-dots"></i></div><span class="arr"><i class="fas fa-arrow-up-right"></i></span><h3>Feedback &amp; Complaints</h3><p>Give feedback on study material quality. Report issues directly to admin for quick resolution.</p></a>
+  <div class="fc" style="--fc:#0891B2;--fb:#CFFAFE"><div class="fi"><i class="fas fa-brain"></i></div><h3>AI Explanations</h3><p>Get AI-generated topic explanations, 1-mark &amp; 5-mark answers, and concept summaries instantly.</p><span class="badge badge-blue" style="margin-top:8px;display:inline-block">Coming Soon</span></div>
+  <div class="fc" style="--fc:#D97706;--fb:#FEF3C7"><div class="fi"><i class="fas fa-language"></i></div><h3>Language Translation</h3><p>Read study materials in your preferred language with instant AI-powered translation support.</p><span class="badge badge-orange" style="margin-top:8px;display:inline-block">Coming Soon</span></div>
+  <a href="/admin" class="fc" style="--fc:#DC2626;--fb:#FEE2E2"><div class="fi"><i class="fas fa-cogs"></i></div><span class="arr"><i class="fas fa-arrow-up-right"></i></span><h3>Admin Panel</h3><p>Upload PDFs, manage content, review feedback and complaints, and track quiz performance.</p></a>
+</div>
+<div class="quick-grid">
+  <div class="card">
+    <h3 style="margin-bottom:1rem;font-size:1.1rem">📚 Recent Materials</h3>
+    <ul class="rl">
+      {% for m in recent_materials %}
+      <li>
+        <div class="ri"><i class="fas fa-file-pdf"></i></div>
+        <div class="rt"><div class="t">{{ m.title }}</div><div class="m">Sem {{ m.semester }} &middot; {{ m.subject }} &middot; Unit {{ m.unit }}</div></div>
+        <span class="badge badge-blue" style="margin-left:auto;white-space:nowrap">Sem {{ m.semester }}</span>
+      </li>
+      {% endfor %}
+    </ul>
+    <a href="/study-material" class="btn btn-outline btn-sm" style="margin-top:1rem">View All Materials <i class="fas fa-arrow-right"></i></a>
+  </div>
+  <div>
+    <h3 style="margin-bottom:1rem;font-size:1.1rem;color:var(--text)">⚡ Quick Access</h3>
+    <div class="qa">
+      <a href="/study-material?semester=3" class="qab b1"><i class="fas fa-book"></i> Semester 3 Materials</a>
+      <a href="/study-material?semester=4" class="qab b2"><i class="fas fa-book"></i> Semester 4 Materials</a>
+      <a href="/quiz" class="qab pu"><i class="fas fa-play-circle"></i> Start a Quiz</a>
+      <a href="/feedback" class="qab gr"><i class="fas fa-plus"></i> Submit Feedback</a>
+    </div>
+  </div>
+</div>
+{% endblock %}
