@@ -61,7 +61,6 @@
   .qab.gr { background:linear-gradient(135deg,#059669,#10B981); }
   @media(max-width:900px) { .hero{grid-template-columns:1fr} .hero-visual{display:none} .stats-bar{grid-template-columns:1fr 1fr} .feat-grid{grid-template-columns:1fr 1fr} .quick-grid{grid-template-columns:1fr} }
   @media(max-width:600px) { .hero{padding:2.5rem 1.5rem} .hero h1{font-size:2.2rem} .feat-grid{grid-template-columns:1fr} }
-  <style>
   /* tumhara pura CSS */
 
   @media(max-width:600px){
@@ -91,9 +90,26 @@
       grid-template-columns: 1fr 1fr !important;
     }
   }
+    /* 🔥 FINAL MOBILE FIX - STATS BOX */
+
+@media (max-width: 768px) {
+
+  .stats-bar {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 10px;
+    padding: 0 10px;
+  }
+
+  .stat-card {
+    width: 100% !important;
+    padding: 1rem !important;
+    box-sizing: border-box;
+  }
+
+}
 
 </style>
-</style> 
 {% endblock %}
 {% block content %}
 <section class="hero">
