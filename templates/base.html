@@ -193,6 +193,82 @@
       color: var(--text3); font-size: 0.82rem;
       border-top: 1px solid var(--border); margin-top: 3rem;
     }
+    @media (max-width: 768px) {
+
+  nav {
+    flex-direction: column;
+    align-items: flex-start;
+    height: auto;
+    padding: 10px;
+  }
+
+  .nav-links {
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 6px;
+    margin-top: 8px;
+  }
+
+  .nav-links a {
+    font-size: 0.8rem;
+    padding: 5px 8px;
+  }
+
+  /* 🔥 FINAL FIX */
+
+html, body {
+  overflow-x: hidden;
+}
+
+nav {
+  flex-wrap: wrap;
+}
+
+main {
+  padding: 1rem !important;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+}
+    @media (max-width: 768px) {
+  nav {
+    flex-direction: column;
+  }
+}
+
+/* 🔥 FINAL FIX (bahar hona chahiye) */
+html, body {
+  overflow-x: hidden;
+}
+
+nav {
+  flex-wrap: wrap;
+}
+    main {
+  padding: 1rem !important;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* NAV ALIGN FIX */
+.nav-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.nav-links a {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
   </style>
   {% block extra_css %}{% endblock %}
 </head>
