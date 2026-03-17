@@ -61,7 +61,39 @@
   .qab.gr { background:linear-gradient(135deg,#059669,#10B981); }
   @media(max-width:900px) { .hero{grid-template-columns:1fr} .hero-visual{display:none} .stats-bar{grid-template-columns:1fr 1fr} .feat-grid{grid-template-columns:1fr 1fr} .quick-grid{grid-template-columns:1fr} }
   @media(max-width:600px) { .hero{padding:2.5rem 1.5rem} .hero h1{font-size:2.2rem} .feat-grid{grid-template-columns:1fr} }
+  <style>
+  /* tumhara pura CSS */
+
+  @media(max-width:600px){
+    ...
+  }
+
+  /* 🔥 MOBILE FIX FINAL */
+  html, body {
+    overflow-x: hidden;
+  }
+
+  @media (max-width: 768px) {
+    body {
+      overflow-x: hidden;
+    }
+
+    .hero {
+      grid-template-columns: 1fr !important;
+      padding: 2rem 1rem !important;
+    }
+
+    .hero-visual {
+      display: none !important;
+    }
+
+    .stats-bar {
+      grid-template-columns: 1fr 1fr !important;
+    }
+  }
+
 </style>
+</style> 
 {% endblock %}
 {% block content %}
 <section class="hero">
